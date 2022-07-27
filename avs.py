@@ -8,9 +8,10 @@ Created on Wed Jul 24 12:18:07 2022
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
+import numpy as np
 
 #%% Archivos y datos de entrada
-archivo_trimestral = 'sietel_savs_2t_2022.xlsx'
+archivo_trimestral = 'sietel_savs_2t_2022.xls'
 archivo_histórico_total = '4.1.1-Suscripciones-TV-Paga_Mar-2022.xlsx'
 mes_1 = '2022-04'
 mes_2 = '2022-05'
@@ -84,6 +85,13 @@ def clasificar(mes_1, mes_2, mes_3):
         if df_history_final.iloc[j, -3] > 0 and df_history_final.iloc[j, -2] == 0:
             df_history_final.iloc[j, -2] = round(df_history_final.iloc[j, -3] * (1 + (((df_history_final.iloc[j, -3]/df_history_final.iloc[j, -5])**(1/3))-1)))
         if df_history_final.iloc[j, -2] > 0 and df_history_final.iloc[j, -1] == 0:
+            df_history_final.iloc[j, -1] = round(df_history_final.iloc[j, -2] * (1 + (((df_history_final.iloc[j, -2]/df_history_final.iloc[j, -4])**(1/3))-1)))
+        
+        if df_history_final.iloc[j, -4] > 0 and str(df_history_final.iloc[j, -3]) == 'nan':
+            df_history_final.iloc[j, -3] = round(df_history_final.iloc[j, -4] * (1 + (((df_history_final.iloc[j, -4]/df_history_final.iloc[j, -6])**(1/3))-1))) 
+        if df_history_final.iloc[j, -3] > 0 and str(df_history_final.iloc[j, -2]) == 'nan':
+            df_history_final.iloc[j, -2] = round(df_history_final.iloc[j, -3] * (1 + (((df_history_final.iloc[j, -3]/df_history_final.iloc[j, -5])**(1/3))-1)))
+        if df_history_final.iloc[j, -2] > 0 and str(df_history_final.iloc[j, -1]) == 'nan':
             df_history_final.iloc[j, -1] = round(df_history_final.iloc[j, -2] * (1 + (((df_history_final.iloc[j, -2]/df_history_final.iloc[j, -4])**(1/3))-1)))
     
     print(f'Mes {mes_1}:', df_history_final[mes_1].sum())
